@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.php?/$1 [L]
+</IfModule>
+
+# 设置方式（为了达到更好的SEO效果可能需要去掉URL里面的index.php ，通过URL重写的方式可以达到这种效果，通常需要服务器开启URL_REWRITE模块才能支持）
+# 1.httpd.conf配置文件中加载了mod_rewrite.so模块 （httpd.conf 是 Apache 的主配置文件）
+# 2.vhost.conf  AllowOverride None 将None改为 All （vhost.conf 是 Apache 的虚拟主机配置文件）
+# 3.ThinkPHP/convention.php 下 确保 URL_MODEL 设置为2
+# 4.配置 .htaccess 文件（注意出现 No input file specified. 问题解决：RewriteRule ^(.*)$ /index.php?/$1 [L] 的index.php后有个?号）
+# 5.重启Apache
+# END~~~
