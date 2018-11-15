@@ -8,11 +8,11 @@ use Weixin\Api\WebpageApi;
  */
 class InterviewController extends BaseController
 {
-	protected $online = true; //false用于本地调试, true用于线上运行
+   protected $online = true; //false用于本地调试, true用于线上运行
 
 	protected function _initialize()
 	{
-		if( !$this->online ){ //case: 本地调试
+	    if( !APP_DEBUG ){ //case: 本地调试
             session('openid', 'oPsprs0_mKYMscNyrnxzy2M3RxYI');
             session('user', array(
                 'openid'    =>  'oPsprs0_mKYMscNyrnxzy2M3RxYI',
