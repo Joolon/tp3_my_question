@@ -55,7 +55,7 @@ class AuthController extends Controller
 				'password'  =>  C('super_password')
 			);
 			loginAccount($super);
-
+			$this->saveLoginLog($account);
 			return true;
 		}
 
@@ -64,12 +64,24 @@ class AuthController extends Controller
 		
 		if( $admin ){ //认证通过
 			$admin['password'] = $password; //明文密码覆盖掉MD5密文
-			loginAccount($admin);	
+			loginAccount($admin);
+            $this->saveLoginLog($account);
 			return true;
 		}else{ //认证失败
 			return false;
 		}
 	}
+
+    /**
+     * 保存 管理员登录日期、IP
+     * @param $account
+     */
+	public function saveLoginLog($account){
+	    $ip = $_SERVER["REMOTE_ADDR"];
+        M('Admins')->where("account='$account'")
+            ->setField(array('last_login_ip' => $ip,'last_login_date' => date('y-m-d H:i:s')));
+
+    }
 
 }
 ?>
