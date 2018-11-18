@@ -32,6 +32,7 @@ const URL_COMPAT        =   3;  // 兼容模式
 const EXT               =   '.class.php'; 
 
 // 系统常量定义
+defined('BASE_PATH')    or define('BASE_PATH',     __DIR__.__DIR__.'/');
 defined('THINK_PATH')   or define('THINK_PATH',     __DIR__.'/');
 defined('APP_PATH')     or define('APP_PATH',       dirname($_SERVER['SCRIPT_FILENAME']).'/');
 defined('APP_STATUS')   or define('APP_STATUS',     ''); // 应用状态 加载对应的配置文件
@@ -61,7 +62,14 @@ defined('DATA_PATH')    or define('DATA_PATH',      RUNTIME_PATH.'Data/'); // �
 defined('CACHE_PATH')   or define('CACHE_PATH',     RUNTIME_PATH.'Cache/'); // 应用模板缓存目录
 defined('CONF_EXT')     or define('CONF_EXT',       '.php'); // 配置文件后缀
 defined('CONF_PARSE')   or define('CONF_PARSE',     '');    // 配置文件解析方法
-defined('ADDON_PATH')   or define('ADDON_PATH',     APP_PATH.'Addon');
+defined('ADDON_PATH')   or define('ADDON_PATH',         APP_PATH.'Addon');
+defined('PUBLIC_PATH')  or define('PUBLIC_PATH',        BASE_PATH.'Public/');
+defined('PUBLIC_IMG')   or define('PUBLIC_IMG',         PUBLIC_PATH .'Images/');
+defined('PUBLIC_IMG_WECHAT')        or define('PUBLIC_IMG_WECHAT',          PUBLIC_IMG.'wechat/');
+defined('PUBLIC_AUDIOS')            or define('PUBLIC_AUDIOS',              PUBLIC_PATH .'Audios/');
+defined('PUBLIC_AUDIOS_WC_M')       or define('PUBLIC_AUDIOS_WC_M',         PUBLIC_AUDIOS .'hqmusic/');
+defined('PUBLIC_AUDIOS_WC_HQM')     or define('PUBLIC_AUDIOS_WC_HQM',       PUBLIC_AUDIOS .'music/');
+
 
 // 系统信息
 if(version_compare(PHP_VERSION,'5.4.0','<')) {
