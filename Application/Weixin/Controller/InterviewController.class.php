@@ -8,7 +8,7 @@ use Weixin\Api\WebpageApi;
  */
 class InterviewController extends BaseController
 {
-   protected $online = true; //false用于本地调试, true用于线上运行
+    protected $online = true; //false用于本地调试, true用于线上运行
 
 	protected function _initialize()
 	{
