@@ -40,9 +40,11 @@ class WechatCallbackApiController extends BaseController
 	
 	// 验证请求是否是来自微信(验证通过原样返回 echostr 字段的内容)
 	public function valid(){
-// 	    var_dump(C('TOKEN'));exit;
 	    $echoStr = $_GET['echostr'];
-	    
+        saveLog($echoStr);
+        echo $echoStr;
+        exit;
+
 	    if($this->checkSignature()){
 	        echo $echoStr;
 	        exit;
