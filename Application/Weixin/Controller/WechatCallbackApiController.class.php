@@ -28,7 +28,7 @@ class WechatCallbackApiController extends BaseController
 	{
 	    requestLog();
 	    // 原样返回 echostr 字段的信息，表示微信验证通过
-	    if(true){
+	    if(false){
 	        $this->valid();
 	    }
 	    $this->responseMsg();
