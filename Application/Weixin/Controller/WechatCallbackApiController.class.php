@@ -40,15 +40,13 @@ class WechatCallbackApiController extends BaseController
 	
 	// 验证请求是否是来自微信(验证通过原样返回 echostr 字段的内容)
 	public function valid(){
-	    $echoStr = $_GET['echostr'];
+	    $echoStr = I('get.echostr');
         saveLog($echoStr);
-        echo $echoStr;
-        exit;
 
-	    if($this->checkSignature()){
-	        echo $echoStr;
-	        exit;
-	    }
+        //echo $echoStr;exit;
+
+        echo $this->checkSignature()?$echoStr:'';
+        exit;
 	}
 	
 	
@@ -152,15 +150,16 @@ class WechatCallbackApiController extends BaseController
 	 * @return boolean
 	 */
 	private function checkSignature(){
-	    
-	    if(!C('TOKEN')){
+        $this->loadSettings(); //加载系统配置信息到C('settings')中
+
+        $token = C('settings.weixin_Token');
+	    if( !$token ){
 	        throw new \Exception('TOKEN is not defined!');
 	    }
 	    
 	    $signature  = $_GET['signature'];
 	    $timestamp  = $_GET['timestamp'];
 	    $nonce      = $_GET['nonce'];
-	    $token      = TOKEN;
 	    
 	    $tmpArr = array($token,$timestamp,$nonce);
 	    sort($tmpArr,SORT_STRING);
