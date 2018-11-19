@@ -25,6 +25,7 @@ define('BASE_PATH',__DIR__.'/');
 define('APP_PATH','./Application/');
 define('HTTP_HOST','http://'.$_SERVER['HTTP_HOST']);
 define('PHP_SELF',$_SERVER['PHP_SELF']);
+define('BIND_MODULE','Admin');
 
 // 引入ThinkPHP入口文件
 require './ThinkPHP/ThinkPHP.php';

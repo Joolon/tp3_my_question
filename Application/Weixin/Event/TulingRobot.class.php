@@ -14,7 +14,7 @@ class TulingRobot{
     
     /**
      * 拼装图灵API 需要的数据
-     * @param unknown $text
+     * @param string $text
      * @return string
      */
     public static function getJsonText($text){
@@ -39,7 +39,7 @@ class TulingRobot{
     
     /**
      * 调用 图灵API接口 获取机器人自动回复消息
-     * @param unknown $text
+     * @param string $text
      * @return string
      */
     public static function queryTuLingText($text){
@@ -56,7 +56,7 @@ class TulingRobot{
     
     /**
      * 解析 图灵 API返回的数据，多条数据合并展示
-     * @param unknown $data
+     * @param string $data
      * @return string
      */
     public static function analysisData($data){
@@ -79,9 +79,9 @@ class TulingRobot{
     
     /**
      * POST 方式 发送请求
-     * @param unknown $url
+     * @param string $url
      * @param string $post_data
-     * @param number $timeout
+     * @param int $timeout
      * @return mixed
      */
     public static function post($url, $post_data = '', $timeout = 5){
