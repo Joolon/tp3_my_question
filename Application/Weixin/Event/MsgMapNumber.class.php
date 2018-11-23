@@ -47,16 +47,16 @@ class MsgMapNumber{
             $content = implode("\n", $content);
             return ['msgType' => $msgType,'content' => $content];
             
-        }elseif(in_array($keyWord,['Dream It Possible','清风莞月浮舟令','年少心事'])){
+        }elseif(in_array($keyWord,['Dream','清风莞月浮舟令','年少心事'])){
             $msgType = 'music';
             
             switch ($keyWord){
-                case 'Dream It Possible':
+                case 'Dream':
                     $content = [
                         'title' => 'Dream It Possible',
                         'desc'  => '《Dream It Possible》...',
-                        'url'   => 'http://jotocome.bceapp.com/music/Dream It Possible.mp3',
-                        'hqurl' => 'http://jotocome.bceapp.com/hqmusic/Dream It Possible.mp3'
+                        'url'   => HTTP_HOST.'/Public/Audios/wechat/music/Dream It Possible.mp3',
+                        'hqurl' => HTTP_HOST.'/Public/Audios/wechat/hqmusic/Dream It Possible.mp3'
                     ];
                     break;
                     
@@ -64,8 +64,8 @@ class MsgMapNumber{
                     $content = [
                         'title' => '清风莞月浮舟令',
                         'desc'  => '《许多葵 - 清风莞月浮舟令》...',
-                        'url'   => 'http://jotocome.bceapp.com/music/许多葵 - 清风莞月浮舟令.mp3',
-                        'hqurl' => 'http://jotocome.bceapp.com/hqmusic/许多葵 - 清风莞月浮舟令.mp3'
+                        'url'   => HTTP_HOST.'/Public/Audios/wechat/music/许多葵 - 清风莞月浮舟令.mp3',
+                        'hqurl' => HTTP_HOST.'/Public/Audios/wechat/hqmusic/许多葵 - 清风莞月浮舟令.mp3'
                     ];
                     break;
                     
@@ -73,8 +73,8 @@ class MsgMapNumber{
                     $content = [
                         'title' => '年少心事',
                         'desc'  => '王一博 - 年少心事...',
-                        'url'   => 'http://jotocome.bceapp.com/music/王一博 - 年少心事.mp3',
-                        'hqurl' => 'http://jotocome.bceapp.com/hqmusic/王一博 - 年少心事.mp3'
+                        'url'   => HTTP_HOST.'/Public/Audios/wechat/music/王一博 - 年少心事.mp3',
+                        'hqurl' => HTTP_HOST.'/Public/Audios/wechat/hqmusic/王一博 - 年少心事.mp3'
                     ];
                     break;
                     

@@ -2,10 +2,6 @@
 namespace Weixin\Controller;
 
 use Common\Controller\BaseController;
-use Weixin\Event\MsgMapNumber;
-use Weixin\Event\MsgMapTpl;
-use Weixin\Event\NewsList;
-use Weixin\Event\TulingRobot;
 // use Library\HttpTool;
 
 
@@ -26,9 +22,9 @@ class WechatTestController extends BaseController
 	 */
 	public function index()
 	{
-	    echo 1;exit;
+	    
+	    (new \Weixin\Api\AboutWechatApi())->getCallbackIp();
 	}
-	
 
 }
 ?>

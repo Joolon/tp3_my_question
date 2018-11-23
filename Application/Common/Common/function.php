@@ -31,5 +31,21 @@ function requestLog(){
 
 
 
+function P_R($content){
+    echo '<pre/>';
+    
+    print_r($content);
+    exit;
+}
+
+function P_R_J($content){
+    echo '<pre/>';
+    
+    print_r(json_decode($content,true));
+    exit;
+}
+
+
+
 
 

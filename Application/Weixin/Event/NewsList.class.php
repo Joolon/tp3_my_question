@@ -22,7 +22,7 @@ class NewsList{
             $data = [
                 'title'     => "刘诗诗 I Love You beauty1-0".sprintf("%02d",$i).".jpg",
                 'desc'      => "这是个美女图片，你可要认真看喔",
-                'picUrl'    => PUBLIC_IMG_WECHAT."beauty1-0".sprintf("%02d",$i).".jpg",
+                'picUrl'    => HTTP_HOST."/Public/Images/wechat/beauty1-0".sprintf("%02d",$i).".jpg",
                 'url'       => HTTP_HOST,
                 
             ];

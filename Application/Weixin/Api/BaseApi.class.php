@@ -20,6 +20,8 @@ class BaseApi
 	protected $Token;
 	protected $EncodingAESKey;
 	protected $cryptType;	
+	
+	protected $wxHost;
 
 	public function __construct()
 	{
@@ -39,6 +41,8 @@ class BaseApi
 		$this->Token = C('settings.weixin_Token');
 		$this->EncodingAESKey = C('settings.weixin_EncodingAESKey');
 		$this->cryptType = C('settings.weixin_cryptType');	
+		
+		$this->wxHost = C('WX_HOST');	
 
 		/* 缓存初始化 */
 		S(array(
@@ -58,7 +62,7 @@ class BaseApi
 			return $access_token;
 
 		/* 令牌缓存超时或者不存在，重新获取 */
-		$interface = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$this->AppID}&secret={$this->AppSecret}";
+			$interface = $this->wxHost."/cgi-bin/token?grant_type=client_credential&appid={$this->AppID}&secret={$this->AppSecret}";
 		$responseSeq = httpGet($interface);
 
 		try {

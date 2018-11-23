@@ -19,7 +19,7 @@ class UserApi extends BaseApi
      */
     public function getSubscriberIDs()
     {
-        $interface = "https://api.weixin.qq.com/cgi-bin/user/get?access_token={$this->getAccessToken()}";
+        $interface = $this->wxHost."/cgi-bin/user/get?access_token={$this->getAccessToken()}";
         $responseSeq = httpGet($interface);
 
         try{
@@ -43,7 +43,7 @@ class UserApi extends BaseApi
      */
     public function getUserInfo($openid)
     {
-        $interface = "https://api.weixin.qq.com/cgi-bin/user/info?access_token={$this->getAccessToken()}&openid=$openid&lang=zh_CN";
+        $interface = $this->wxHost."/cgi-bin/user/info?access_token={$this->getAccessToken()}&openid=$openid&lang=zh_CN";
         $responseSeq = httpGet($interface);
 
         try{

@@ -21,7 +21,7 @@ class ResourceApi extends BaseApi
      */
     public function uploadNews($title, $mediaID, $content, $link, $digest='', $author='', $showCover=1)
     {
-        $interface = "https://api.weixin.qq.com/cgi-bin/media/uploadnews?access_token={$this->getAccessToken()}";
+        $interface = $this->wxHost."/cgi-bin/media/uploadnews?access_token={$this->getAccessToken()}";
         $data = <<<data
                         {
                            "articles": [
