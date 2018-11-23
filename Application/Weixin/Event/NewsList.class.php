@@ -23,7 +23,7 @@ class NewsList{
                 'title'     => "刘诗诗 I Love You beauty1-0".sprintf("%02d",$i).".jpg",
                 'desc'      => "这是个美女图片，你可要认真看喔",
                 'picUrl'    => HTTP_HOST."/Public/Images/wechat/beauty1-0".sprintf("%02d",$i).".jpg",
-                'url'       => HTTP_HOST."/Auth/login.html",
+                'url'       => HTTP_HOST."/Reply/statistic/questionnaireID/1.html",
                 
             ];
             
