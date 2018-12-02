@@ -79,5 +79,64 @@ class LabelApi extends BaseApi
         $responseSeq    = json_decode($responseSeq,true);
         return $responseSeq;
     }
+    
+    
+    /**
+     * 根据 标签获取用户列表
+     * @param unknown $tagid
+     * @param string $next_openid
+     * @return boolean|mixed
+     */
+    public function getUserListByTag($tagid,$next_openid = ''){
+        if(empty($tagid)) return false;
+        
+        $queryContent   = array('tagid' => $tagid,'next_openid' => $next_openid);
+        $interface      = $this->wxHost."/cgi-bin/user/tag/get?access_token={$this->accessToken}";
+        $responseSeq    = httpPost($interface,json_encode($queryContent));
+        $responseSeq    = json_decode($responseSeq,true);
+        return $responseSeq;
+    }
+    
+    /**
+     * 给用户 设置或取消标签
+     * @param unknown $openid_list
+     * @param unknown $tagid
+     * @param string $type   build.设置标签，其他.取消标签
+     * @return boolean|mixed
+     */
+    public function setTagForUser($openid_list,$tagid,$type = 'build'){
+        if(empty($openid_list) OR empty($tagid)) return false;
+        
+        $forContent   = array(
+            'openid_list'   => (is_array($openid_list)?$openid_list:[$openid_list]),
+            'tagid'         => $tagid
+        );
+        if($type == 'build'){
+            $interface      = $this->wxHost."/cgi-bin/tags/members/batchtagging?access_token={$this->accessToken}";
+        }else{
+            $interface      = $this->wxHost."/cgi-bin/tags/members/batchuntagging?access_token={$this->accessToken}";
+        }
+        $responseSeq    = httpPost($interface,json_encode($forContent));
+        $responseSeq    = json_decode($responseSeq,true);
+        return $responseSeq;
+        
+    }
+    
+    
+    /**
+     * 获取用户身上的 标签
+     * @param unknown $openid
+     * @return boolean|mixed
+     */
+    public function getTagFormUser($openid){
+        if(empty($openid)) return false;
+        
+        $forContent     = array('openid' => $openid);
+        $interface      = $this->wxHost."/cgi-bin/tags/getidlist?access_token={$this->accessToken}";
+        $responseSeq    = httpPost($interface,json_encode($forContent));
+        $responseSeq    = json_decode($responseSeq,true);
+        return $responseSeq;
+        
+    }
 
 }

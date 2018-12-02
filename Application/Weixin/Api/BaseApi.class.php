@@ -65,7 +65,7 @@ class BaseApi
 		}
 
 		/* 令牌缓存超时或者不存在，重新获取 */
-			$interface = $this->wxHost."/cgi-bin/token?grant_type=client_credential&appid={$this->AppID}&secret={$this->AppSecret}";
+		$interface = $this->wxHost."/cgi-bin/token?grant_type=client_credential&appid={$this->AppID}&secret={$this->AppSecret}";
 		$responseSeq = httpGet($interface);
 
 		try {
@@ -109,7 +109,7 @@ class BaseApi
 	    $errmsg  = $e->getMessage();
 	    
 	    /* 再次上抛异常至TP设定的顶层异常处理器中, 输出异常处理模板 */
-	    throw new \Think\Exception("微信网页授权令牌接口请求错误 <br /> 消息: $errmsg <br /> 错误码: $errcode", $errcode);
+	    exit("微信网页授权令牌接口请求错误\t消息: $errmsg \t错误码: $errcode");
 	}
 
 }
