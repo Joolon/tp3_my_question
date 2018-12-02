@@ -15,7 +15,7 @@ class NewsList{
      * @return array
      */
     public static function getNewsList($count = 3){
-        $count = ($count > 10)?10:($count<=0 ? 3:$count);// 最大最小个数限制
+        $count = ($count >= 8)?8:($count<=0 ? 3:$count);// 最大最小个数限制
         
         $list = [];
         for($i = 1;$i <= $count;$i ++){
