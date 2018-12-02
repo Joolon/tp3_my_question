@@ -72,8 +72,6 @@ class WechatApiController extends BaseController
 	        $this->msgType        = $this->postObj->MsgType;// 接受用户消息类型
 	        $this->nowTime        = time();
 	        
-	        saveLog($this->msgType);
-	        
 	        switch($this->msgType){
 	            case 'text':	               
 	                $resultStr = $this->transmitText();
@@ -120,8 +118,6 @@ class WechatApiController extends BaseController
 	        $content        = $returnContent['content'];// 返回的消息内容
 	        $xmlTpl         = MsgMapTpl::mapTpl($msgType);// 根据消息类型获取 类型对应的模板
 	        
-	        saveLog($xmlTpl);
-	        saveLog($returnContent);
 	        if($msgType == 'text' AND $content){// 文本消息内容
 	            $resultStr = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->time,$msgType,$content);
 	        }else if($msgType == 'music'){// 音乐消息内容
@@ -155,7 +151,6 @@ class WechatApiController extends BaseController
 	            $msgType    = 'text';
 	            $resultStr  = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->time,$msgType,$return_text);
 	        }
-	        saveLog($resultStr);
 	        
 	        return $resultStr;
 	    }else{
@@ -207,12 +202,7 @@ class WechatApiController extends BaseController
 	        $label         = $this->postObj->Label;
 	        $createTime    = $this->postObj->CreateTime;
 	        
-	        $content = "【您的位置】\r\n ".
-            	        "X坐标信息：{$location_X}\r\n".
-            	        "Y坐标信息:{$location_Y}\r\n".
-            	        "地理位置:{$label}\r\n".
-            	        "精度 :{$scale}\r\n".
-            	        "时间:{$createTime}";
+	        $content = "【您的位置】";
 	        return $this->convertToText($content);
 	        
 	    }else{
