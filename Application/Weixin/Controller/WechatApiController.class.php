@@ -82,14 +82,14 @@ class WechatApiController extends BaseController
 	            case 'news':
 	                $resultStr = $this->transmitNews();
 	                break;
-	            case 'music':
+	            case 'voice':
 	                $resultStr = $this->transmitVoice();
 	                break;
 	            case 'location':
-	                $resultStr = $this->transmitLocationl();
+	                $resultStr = $this->transmitLocation();
 	                break;
-	            case 'audio':
-	                $resultStr = $this->transmitAudio();
+	            case 'video':
+	                $resultStr = $this->transmitVideo();
 	                break;
 	            case 'event':
 	                $resultStr = $this->transmitEvent();
@@ -187,22 +187,27 @@ class WechatApiController extends BaseController
 	    $event     = $this->postObj->Event;
 	    $eventKey  = $this->postObj->EventKey;
 	    
-	    if($event ==  'CLICK' AND $eventKey == 'C_GOOD'){
+	    if($event == 'CLICK' AND $eventKey == 'C_GOOD'){
 	        $content = "【Thank You】\r\n让您满意是我们最高荣耀！感谢您的来信。";
 	        return $this->convertToText($content);
 	        
-	    }elseif($event ==  'scancode_push' AND $eventKey == 'C_SCAN'){
+	    }elseif($event == 'scancode_push' AND $eventKey == 'C_SCAN'){
 	        $content = $this->postObj->ScanResult;
 	        return $this->convertToText($content);
 	        
-	    }elseif($event ==  'location_select' AND $eventKey == 'C_LOCAL'){
+	    }elseif($event == 'location_select' AND $eventKey == 'C_LOCAL'){
 	        $location_X    = $this->postObj->Location_X;
 	        $location_Y    = $this->postObj->Location_Y;
 	        $scale         = $this->postObj->Scale;
 	        $label         = $this->postObj->Label;
-	        $createTime    = $this->postObj->CreateTime;
+	        $createTime    = date('Y-m-d H:i:s',$this->postObj->CreateTime);
 	        
-	        $content = "【您的位置】";
+	        $content = "【您的位置】\r\n ".
+	   	        "X坐标信息：{$location_X}\r\n".
+	   	        "Y坐标信息:{$location_Y}\r\n".
+	   	        "地理位置:{$label}\r\n".
+	   	        "精度 :{$scale}\r\n".
+	   	        "时间:{}";
 	        return $this->convertToText($content);
 	        
 	    }else{
