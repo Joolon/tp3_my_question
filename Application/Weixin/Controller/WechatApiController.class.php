@@ -189,23 +189,23 @@ class WechatApiController extends BaseController
 	 * 响应 微信事件类型 消息
 	 */
 	public function transmitEvent(){
-	    $event     = $this->postObj->event;
-	    $eventKey  = $this->postObj->eventKey;
+	    $event     = $this->postObj->Event;
+	    $eventKey  = $this->postObj->EventKey;
 	    
 	    if($event ==  'CLICK' AND $eventKey == 'C_GOOD'){
 	        $content = "【Thank You】\r\n让您满意是我们最高荣耀！感谢您的来信。";
 	        return $this->convertToText($content);
 	        
 	    }elseif($event ==  'scancode_push' AND $eventKey == 'C_SCAN'){
-	        $content = $this->postObj->scanResult;
+	        $content = $this->postObj->ScanResult;
 	        return $this->convertToText($content);
 	        
 	    }elseif($event ==  'location_select' AND $eventKey == 'C_LOCAL'){
-	        $location_X    = $this->postObj->location_X;
-	        $location_Y    = $this->postObj->location_Y;
-	        $scale         = $this->postObj->scale;
-	        $label         = $this->postObj->label;
-	        $createTime    = $this->postObj->createTime;
+	        $location_X    = $this->postObj->Location_X;
+	        $location_Y    = $this->postObj->Location_Y;
+	        $scale         = $this->postObj->Scale;
+	        $label         = $this->postObj->Label;
+	        $createTime    = $this->postObj->CreateTime;
 	        
 	        $content = "【您的位置】\r\n ".
             	        "X坐标信息：{$location_X}\r\n".
