@@ -15,9 +15,9 @@ return array(
                   "key":"C_NEWS"
               },
              {
-                  "type":"click",
+                  "type":"view",
                   "name":"问卷调查",
-                  "key":"C_QUEST"
+                  "url":"http://47.107.183.46/wx.php/Interview/index"
               },
               {
                    "name":"更多",
