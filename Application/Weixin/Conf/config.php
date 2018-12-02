@@ -28,14 +28,14 @@ return array(
                        "key":"C_SCAN"
                     },
                    {
+                       "type":"scancode_waitmsg",
+                       "name":"扫码推",
+                       "key":"C_SCAN_2"
+                    },
+                   {
                        "type":"location_select",
                        "name":"发送位置",
                        "key":"C_LOCAL"
-                    },
-                   {
-                       "type":"view",
-                       "name":"搜索",
-                       "url":"https://www.baidu.com/"
                     },
                     {
                        "type":"click",
