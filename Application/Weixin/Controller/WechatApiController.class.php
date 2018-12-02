@@ -201,13 +201,13 @@ class WechatApiController extends BaseController
 	        $location_Y    = $this->postObj->SendLocationInfo->Location_Y;
 	        $scale         = $this->postObj->SendLocationInfo->Scale;
 	        $label         = $this->postObj->SendLocationInfo->Label;
-	        $createTime    = date('Y-m-d H:i:s',$this->postObj->CreateTime);
+	        $createTime    = date('Y-m-d H:i:s');
 	        
 	        $content = "【您的位置】\r\n ".
 	   	        "经度：{$location_X}\r\n".
 	   	        "纬度：{$location_Y}\r\n".
 	   	        "位置：{$label}\r\n".
-	   	        "精度：{$scale}".
+	   	        "精度：{$scale}\r\n".
 	            "时间：{$createTime}";
 	        return $this->convertToText($content);
 	        
@@ -227,13 +227,13 @@ class WechatApiController extends BaseController
 	    $location_Y    = $this->postObj->Location_Y;
 	    $scale         = $this->postObj->Scale;
 	    $label         = $this->postObj->Label;
-	    $createTime    = date('Y-m-d H:i:s',$this->postObj->CreateTime);
+	    $createTime    = date('Y-m-d H:i:s');
 	    
 	    $content = "【您的位置】\r\n ".
 	   	    "经度：{$location_X}\r\n".
 	   	    "纬度：{$location_Y}\r\n".
 	   	    "位置：{$label}\r\n".
-	   	    "精度：{$scale}".
+	   	    "精度：{$scale}\r\n".
 	   	    "时间：{$createTime}";
 	    return $this->convertToText($content);
 	    
