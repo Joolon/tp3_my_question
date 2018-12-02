@@ -91,6 +91,12 @@ class WechatApiController extends BaseController
 	            case 'video':
 	                $resultStr = $this->transmitVideo();
 	                break;
+	            case 'shortvideo':
+	                $resultStr = $this->transmitShortvideo();
+	                break;
+	            case 'link':
+	                $resultStr = $this->transmitLink();
+	                break;
 	            case 'event':
 	                $resultStr = $this->transmitEvent();
 	                break;
@@ -125,21 +131,7 @@ class WechatApiController extends BaseController
 	                $resultStr = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->nowTime,$msgType,$content['title'],$content['desc'],$content['url'],$content['hqurl']);
 	            }
 	        }elseif($msgType == 'news'){// 图文消息内容
-	            $itemsLit           = NewsList::getNewsList(3);// 图文消息列表
-	            $newsXmlTpl         = MsgMapTpl::mapTpl('news');// 图文消息模板
-	            $newsItemsXmlTpl    = MsgMapTpl::mapTpl('news_items');// 图文消息模板中的 Items模板
-	            	           
-	            // 拼装 Items的数据
-	            $count              = count($itemsLit);
-	            $newsItemsXml       = '';
-	            foreach($itemsLit as $value_item){
-	                $newsItemsXml   .= sprintf($newsItemsXmlTpl,$value_item['title'],$value_item['desc'],$value_item['picUrl'],$value_item['url']);
-	            }
-	            
-	            // 拼接消息内容
-	            $newsXml = sprintf($newsXmlTpl,$this->fromUsername,$this->toUsername,$this->nowTime,$msgType,$count,$newsItemsXml);
-	            
-	            $resultStr = $newsXml;
+	            $resultStr = $this->convertToNews();
 	        }
 	        
 	        if(empty($resultStr)){// 未响应用户请求
@@ -180,6 +172,24 @@ class WechatApiController extends BaseController
 	    return $resultStr;
 	}
 	
+	public function convertToNews($count = 3,$msgType = 'news'){
+	    $itemsLit           = NewsList::getNewsList($count);// 图文消息列表
+	    $newsXmlTpl         = MsgMapTpl::mapTpl('news');// 图文消息模板
+	    $newsItemsXmlTpl    = MsgMapTpl::mapTpl('news_items');// 图文消息模板中的 Items模板
+	    
+	    // 拼装 Items的数据
+	    $count              = count($itemsLit);
+	    $newsItemsXml       = '';
+	    foreach($itemsLit as $value_item){
+	        $newsItemsXml   .= sprintf($newsItemsXmlTpl,$value_item['title'],$value_item['desc'],$value_item['picUrl'],$value_item['url']);
+	    }
+	    
+	    // 拼接消息内容
+	    $newsXml = sprintf($newsXmlTpl,$this->fromUsername,$this->toUsername,$this->nowTime,$msgType,$count,$newsItemsXml);
+	    
+	    return $newsXml;	    
+	}
+	
 	/**
 	 * 响应 微信事件类型 消息
 	 */
@@ -187,7 +197,14 @@ class WechatApiController extends BaseController
 	    $event     = $this->postObj->Event;
 	    $eventKey  = $this->postObj->EventKey;
 	    
-	    if($event == 'CLICK' AND $eventKey == 'C_GOOD'){
+	    if($event == 'CLICK' AND $eventKey == 'C_NEWS'){// 最新消息
+	        return $this->convertToNews(5);
+	        
+	    }elseif($event == 'CLICK' AND $eventKey == 'C_QUEST'){// 查看问卷
+	        $content = "【Thank You】\r\n让您满意是我们最高荣耀！感谢您的来信。";
+	        return $this->convertToText($content);
+	        
+	    }elseif($event == 'CLICK' AND $eventKey == 'C_GOOD'){
 	        $content = "【Thank You】\r\n让您满意是我们最高荣耀！感谢您的来信。";
 	        return $this->convertToText($content);
 	        
@@ -215,11 +232,49 @@ class WechatApiController extends BaseController
 	            "时间：{$createTime}";
 	        return $this->convertToText($content);
 	        
+	    }elseif($event == 'subscribe' OR $event == 'unsubscribe'){// 订阅、取消订阅
+	        if($event == 'subscribe'){
+	            return $this->convertToText('等你等了那么久，亲,欢饮您');
+	        }else{
+	            
+	            return '';	            
+	        }	        
 	    }else{
 	        return $this->convertToText('亲爱的，您已穿越到明朝了哦');
 	    }
 	    
 	    
+	}
+	
+	public function transmitVoice(){
+	    $recognition   = $this->postObj->Recognition;
+	    $mediaID       = $this->postObj->MediaID;
+	    $format        = $this->postObj->Format;
+	    $content       = "【您的消息】\r\n内容：{$recognition}\r\n资源ID：{$mediaID}\r\n格式：{$format}";
+	    return $this->convertToText($content);
+	}
+	
+	public function transmitVideo(){
+	    $mediaId       = $this->postObj->MediaId;
+	    $content       = "【您的消息】\r\n内容：视频\r\n资源ID：{$mediaId}";
+	    return $this->convertToText($content);
+	}
+	
+	
+	public function transmitShortVideo(){
+	    $mediaId       = $this->postObj->MediaId;
+	    $content       = "【您的消息】\r\n内容：小视频\r\n资源ID：{$mediaId}";
+	    return $this->convertToText($content);
+	}
+	
+	
+	public function transmitLink(){
+	    $title         = $this->postObj->Title;
+	    $description   = $this->postObj->Description;
+	    $url           = $this->postObj->Url;
+	    $msgId         = $this->postObj->MsgId;
+	    $content       = "【您的消息】\r\n标题：{$title}\r\n描述：{$description}\r\n链接：{$url}\r\n资源ID：{$msgId}";
+	    return $this->convertToText($content);
 	}
 	
 	/**
