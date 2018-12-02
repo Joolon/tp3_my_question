@@ -216,6 +216,22 @@ class WechatApiController extends BaseController
 	    
 	}
 	
+	public function transmitLocation(){
+	    $location_X    = $this->postObj->Location_X;
+	    $location_Y    = $this->postObj->Location_Y;
+	    $scale         = $this->postObj->Scale;
+	    $label         = $this->postObj->Label;
+	    $createTime    = date('Y-m-d H:i:s',$this->postObj->CreateTime);
+	    
+	    $content = "【您的位置】\r\n ".
+	   	    "X坐标信息：{$location_X}\r\n".
+	   	    "Y坐标信息:{$location_Y}\r\n".
+	   	    "地理位置:{$label}\r\n".
+	   	    "精度 :{$scale}";
+	    return $this->convertToText($content);
+	    
+	}
+	
 	
 	
 	/**
