@@ -35,14 +35,13 @@ class BaseApi
         (new \Common\Controller\BaseController())->loadSettings(); //加载应用配置
 
 		/* 读取微信公众号配置到当前Api对象 */
-		$this->AppID = C('settings.weixin_AppID');
-		$this->AppSecret = C('settings.weixin_AppSecret');
-		$this->domain = C('settings.weixin_domain');	
-		$this->Token = C('settings.weixin_Token');
+		$this->AppID      = C('settings.weixin_AppID');
+		$this->AppSecret  = C('settings.weixin_AppSecret');
+		$this->domain     = C('settings.weixin_domain');	
+		$this->Token      = C('settings.weixin_Token');
 		$this->EncodingAESKey = C('settings.weixin_EncodingAESKey');
-		$this->cryptType = C('settings.weixin_cryptType');	
-		
-		$this->wxHost = C('WX_HOST');	
+		$this->cryptType  = C('settings.weixin_cryptType');	
+		$this->wxHost     = C('WX_HOST');	
 
 		/* 缓存初始化 */
 		S(array(
@@ -58,8 +57,10 @@ class BaseApi
 	public function getAccessToken()
 	{
 		/* 缓存了有效令牌 */
-		if( $access_token = S('access_token') )
-			return $access_token;
+	    $access_token = S('access_token');
+	    if( $access_token ){
+		    return $access_token;
+		}
 
 		/* 令牌缓存超时或者不存在，重新获取 */
 			$interface = $this->wxHost."/cgi-bin/token?grant_type=client_credential&appid={$this->AppID}&secret={$this->AppSecret}";
@@ -75,7 +76,7 @@ class BaseApi
 			throw new \Think\Exception("微信令牌接口请求错误 <br /> 消息: $errmsg <br /> 错误码: $errcode", $errcode);
 		}
 
-		S('access_token', $result['access_token']); //缓存令牌
+		S('access_token', $result['access_token'],7000); //缓存令牌
 		return $result['access_token'];			
 	}
 
@@ -94,7 +95,20 @@ class BaseApi
 		}else{
 			return $response;
 		}
-	}	
+	}
+	
+	/**
+	 * 抛出异常  显示信息
+	 * @param object $e
+	 * @throws \Think\Exception
+	 */
+	protected function showExceptionError($e){
+	    $errcode = $e->getCode();
+	    $errmsg  = $e->getMessage();
+	    
+	    /* 再次上抛异常至TP设定的顶层异常处理器中, 输出异常处理模板 */
+	    throw new \Think\Exception("微信网页授权令牌接口请求错误 <br /> 消息: $errmsg <br /> 错误码: $errcode", $errcode);
+	}
 
 }
 ?>

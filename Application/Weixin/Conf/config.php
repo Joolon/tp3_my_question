@@ -3,35 +3,49 @@ return array(
 	//'配置项'=>'配置值'
 	
     'TOKEN' => 'jolon',
-    'WX_HOST' => 'https://api.weixin.qq.com',
+    'WX_HOST' => 'https://api.weixin.qq.com',// 微信 API 主机域名
     
     
+    // 公众号菜单配置
     'MENU_CONTENT' => '{
              "button":[
              {
                   "type":"click",
-                  "name":"今日歌曲",
-                  "key":"V1001_TODAY_MUSIC"
+                  "name":"最新消息",
+                  "key":"C_NEWS"
+              },
+             {
+                  "type":"click",
+                  "name":"问卷调查",
+                  "key":"C_QUEST"
               },
               {
-                   "name":"菜单",
+                   "name":"更多",
                    "sub_button":[
+                   {
+                       "type":"scancode_push",
+                       "name":"扫一扫",
+                       "key":"C_SCAN"
+                    },
+                   {
+                       "type":"location_select",
+                       "name":"发送位置",
+                       "key":"C_LOCAL"
+                    },
                    {
                        "type":"view",
                        "name":"搜索",
-                       "url":"http://www.soso.com/"
+                       "url":"https://www.baidu.com/"
                     },
                     {
-                         "type":"miniprogram",
-                         "name":"wxa",
-                         "url":"http://mp.weixin.qq.com",
-                         "appid":"wx286b93c14bbf93aa",
-                         "pagepath":"pages/lunar/index"
-                     },
-                    {
                        "type":"click",
-                       "name":"赞一下我们",
-                       "key":"V1001_GOOD"
+                       "name":"喜欢我们就点我吧",
+                       "key":"C_GOOD"
+                    },
+                    {
+                       "type":"view",
+                       "name":"关于我们",
+                       "url":"http://www.soso.com/"
                     }]
                }]
             }',

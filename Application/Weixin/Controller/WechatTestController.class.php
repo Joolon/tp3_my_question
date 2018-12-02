@@ -23,7 +23,16 @@ class WechatTestController extends BaseController
 	public function index()
 	{
 	    
-	    (new \Weixin\Api\AboutWechatApi())->getCallbackIp();
+	    
+	    
+	    $menuContent = C('MENU_CONTENT');
+// 	    var_dump($menuContent);exit;
+	    (new \Weixin\Api\MenuApi())->createMenu($menuContent);
+	    
+	    
+	    
+	    exit;
+	    
 	}
 
 }

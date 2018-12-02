@@ -84,7 +84,7 @@ class WechatApiController extends BaseController
 	            case 'news':
 	                $resultStr = $this->transmitNews();
 	                break;
-	            case 'voice':
+	            case 'music':
 	                $resultStr = $this->transmitVoice();
 	                break;
 	            case 'location':

@@ -18,26 +18,18 @@ class MenuApi extends BaseApi
 	 */
 	public function	createMenu($menuContent)
 	{
-	   
-	    $access_token = $this->getAccessToken();
-	    $interface = $this->wxHost."/cgi-bin/menu/create?access_token=$access_token";
-	    
-	    $responseSeq = httpPost($interface, $menuContent);
-		
-		var_dump($responseSeq);exit;
+	    $access_token  = $this->getAccessToken();
+	    $interface     = $this->wxHost."/cgi-bin/menu/create?access_token=$access_token";
+	    $responseSeq   = httpPost($interface, $menuContent);
+	    P_R($responseSeq);
 
 		try {
 			$result = $this->responseValidate($responseSeq);
 		} catch ( \Exception $e ) {
-			$errcode = $e->getCode();
-			$errmsg = $e->getMessage();
-
-			/* 再次上抛异常至TP设定的顶层异常处理器中, 输出异常处理模板 */
-			throw new \Think\Exception("微信网页授权令牌接口请求错误 <br /> 消息: $errmsg <br /> 错误码: $errcode", $errcode);
+			$this->showExceptionError($e);
 		}
 
 		session('openid', $result['openid']); //会话记录当前答题者的openid
-
 		return $result['access_token'];			
 	}
 	
@@ -50,9 +42,7 @@ class MenuApi extends BaseApi
 	    //P_R($interface);
 	    $responseSeq = httpGet($interface);
 	    
-	    var_dump($responseSeq);exit;
-	    
-	    
+	    P_R_J($responseSeq);
 	}
 
     
