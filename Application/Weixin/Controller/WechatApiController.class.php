@@ -195,7 +195,8 @@ class WechatApiController extends BaseController
 	        $content = $this->postObj->ScanResult;
 	        return $this->convertToText($content);
 	        
-	    }elseif($event == 'location_select' AND $eventKey == 'C_LOCAL'){
+	    }elseif($event == 'location_select' AND $eventKey == 'C_LOCAL'){// 地理位置选择 事件推送
+	        // 先发起一个 地理位置选择时间，再发送地理位置消息  （transmitLocation() 方法捕捉地理消息）
 	        $location_X    = $this->postObj->SendLocationInfo->Location_X;
 	        $location_Y    = $this->postObj->SendLocationInfo->Location_Y;
 	        $scale         = $this->postObj->SendLocationInfo->Scale;
@@ -203,10 +204,11 @@ class WechatApiController extends BaseController
 	        $createTime    = date('Y-m-d H:i:s',$this->postObj->CreateTime);
 	        
 	        $content = "【您的位置】\r\n ".
-	   	        "X坐标信息：{$location_X}\r\n".
-	   	        "Y坐标信息:{$location_Y}\r\n".
-	   	        "地理位置:{$label}\r\n".
-	   	        "精度 :{$scale}";
+	   	        "经度：{$location_X}\r\n".
+	   	        "纬度：{$location_Y}\r\n".
+	   	        "位置：{$label}\r\n".
+	   	        "精度：{$scale}".
+	            "时间：{$createTime}";
 	        return $this->convertToText($content);
 	        
 	    }else{
@@ -216,6 +218,10 @@ class WechatApiController extends BaseController
 	    
 	}
 	
+	/**
+	 * 地理位置消息推送
+	 * @return string
+	 */
 	public function transmitLocation(){
 	    $location_X    = $this->postObj->Location_X;
 	    $location_Y    = $this->postObj->Location_Y;
@@ -224,10 +230,11 @@ class WechatApiController extends BaseController
 	    $createTime    = date('Y-m-d H:i:s',$this->postObj->CreateTime);
 	    
 	    $content = "【您的位置】\r\n ".
-	   	    "X坐标信息：{$location_X}\r\n".
-	   	    "Y坐标信息:{$location_Y}\r\n".
-	   	    "地理位置:{$label}\r\n".
-	   	    "精度 :{$scale}";
+	   	    "经度：{$location_X}\r\n".
+	   	    "纬度：{$location_Y}\r\n".
+	   	    "位置：{$label}\r\n".
+	   	    "精度：{$scale}".
+	   	    "时间：{$createTime}";
 	    return $this->convertToText($content);
 	    
 	}
