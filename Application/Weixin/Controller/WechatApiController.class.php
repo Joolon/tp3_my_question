@@ -207,7 +207,7 @@ class WechatApiController extends BaseController
 	   	        "Y坐标信息:{$location_Y}\r\n".
 	   	        "地理位置:{$label}\r\n".
 	   	        "精度 :{$scale}\r\n".
-	   	        "时间:{}";
+	   	        "时间:{$createTime}";
 	        return $this->convertToText($content);
 	        
 	    }else{
