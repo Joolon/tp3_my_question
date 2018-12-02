@@ -22,6 +22,7 @@ class BaseApi
 	protected $cryptType;	
 	
 	protected $wxHost;
+	protected $accessToken;
 
 	public function __construct()
 	{
@@ -43,6 +44,7 @@ class BaseApi
 		$this->cryptType  = C('settings.weixin_cryptType');	
 		$this->wxHost     = C('WX_HOST');	
 
+		$this->accessToken = $this->getAccessToken();
 		/* 缓存初始化 */
 		S(array(
 			'type' => 'file',
