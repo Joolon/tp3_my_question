@@ -172,6 +172,14 @@ class WechatApiController extends BaseController
 	    return $resultStr;
 	}
 	
+	/**
+	 * 发送一个 图文消息
+	 * 图文消息个数；当用户发送文本、图片、视频、图文、地理位置这五种消息时，开发者只能回复1条图文消息；其余场景最多可回复8条图文消息
+	 * @link https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140543
+	 * @param number $count
+	 * @param string $msgType
+	 * @return string
+	 */
 	public function convertToNews($count = 3,$msgType = 'news'){
 	    $itemsLit           = NewsList::getNewsList($count);// 图文消息列表
 	    $newsXmlTpl         = MsgMapTpl::mapTpl('news');// 图文消息模板
@@ -198,7 +206,7 @@ class WechatApiController extends BaseController
 	    $eventKey  = $this->postObj->EventKey;
 	    
 	    if($event == 'CLICK' AND $eventKey == 'C_NEWS'){// 最新消息
-	        return $this->convertToNews(5);
+	        return $this->convertToNews(10);
 	        
 	    }elseif($event == 'CLICK' AND $eventKey == 'C_QUEST'){// 查看问卷
 	        $content = "【Thank You】\r\n让您满意是我们最高荣耀！感谢您的来信。";
@@ -232,8 +240,8 @@ class WechatApiController extends BaseController
 	            "时间：{$createTime}";
 	        return $this->convertToText($content);
 	        
-	    }elseif($event == 'subscribe' OR $event == 'unsubscribe'){// 订阅、取消订阅
-	        if($event == 'subscribe'){
+	    }elseif($event == 'subscribe' OR $event == 'unsubscribe'){// 订阅、取消订阅时处理事件
+	        if($event == 'subscribe'){// 关注时推送一个问候语
 	            return $this->convertToText('等你等了那么久，亲,欢饮您');
 	        }else{
 	            
