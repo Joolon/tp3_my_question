@@ -46,7 +46,7 @@ class WechatApiController extends BaseController
 
         //echo $echoStr;exit;
 
-        echo $this->checkSignature()?$echoStr:'';
+        echo $this->checkSignature()?$echoStr:'error';
         exit;
 	}
 	
