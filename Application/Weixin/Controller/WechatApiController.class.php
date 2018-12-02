@@ -15,6 +15,12 @@ use Weixin\Event\TulingRobot;
  */
 class WechatApiController extends BaseController
 {
+    public $fromUsername    = null;
+    public $toUsername      = null;
+    public $msgType         = null;
+    public $postObj         = null;
+    public $nowTime         = null;
+    
 	protected function _initialize()
 	{
 	    
@@ -22,6 +28,7 @@ class WechatApiController extends BaseController
 
 
 	/**
+	 * 微信 API 唯一入口
 	 * 监听微信公众平台推送的普通消息或操作事件
 	 */
 	public function index()
@@ -33,18 +40,16 @@ class WechatApiController extends BaseController
 	    }else{
 	        $this->responseMsg();	        
 	    }
-	    
-	    // $phoneNumber = new MsgMapNumber();
-	    // $phoneNumber->responsePhoneNumberList();
+	    exit;
 	}
 	
 	
-	// 验证请求是否是来自微信(验证通过原样返回 echostr 字段的内容)
+	/**
+	 * 验证请求是否是来自微信(验证通过原样返回 echostr 字段的内容)
+	 */
 	public function valid(){
 	    $echoStr = I('get.echostr');
         saveLog($echoStr);
-
-        //echo $echoStr;exit;
 
         echo $this->checkSignature()?$echoStr:'error';
         exit;
@@ -59,88 +64,107 @@ class WechatApiController extends BaseController
 	    
 	    if(!empty($postStr)){
 	        saveLog($postStr);
-	        
 	        libxml_disable_entity_loader(true);
 	        
-	        $postObj        = simplexml_load_string($postStr,'SimpleXMLElement',LIBXML_NOCDATA);
-	        $fromUsername   = $postObj->FromUserName;// 消息发送者
-	        $toUsername     = $postObj->ToUserName;// 消息接收者
-	        $msgType        = $postObj->MsgType;// 接受用户消息类型
-	        $time           = time();
+	        $this->postObj        = simplexml_load_string($postStr,'SimpleXMLElement',LIBXML_NOCDATA);
+	        $this->fromUsername   = $this->postObj->FromUserName;// 消息发送者
+	        $this->toUsername     = $this->postObj->ToUserName;// 消息接收者
+	        $this->msgType        = $this->postObj->MsgType;// 接受用户消息类型
+	        $this->nowTime        = time();
 	        
-	        saveLog($msgType);
-	        if($msgType == 'text'){
-	            $keyWord        = trim($postObj->Content);
-	            if(!empty($keyWord)){
-	                $resultStr = '';
-	                
-	                $returnContent  = MsgMapNumber::mapMsg($keyWord);// 根据关键字的值设置 返回消息类型与内容
-	                $msgType        = $returnContent['msgType'];// 返回的消息类型
-	                $content        = $returnContent['content'];// 返回的消息内容
-	                $xmlTpl         = MsgMapTpl::mapTpl($msgType);// 根据消息类型获取 类型对应的模板
-	                
-	                saveLog($xmlTpl);
-	                saveLog($returnContent);
-	                if($msgType == 'text' AND $content){// 文本消息内容
-	                    $resultStr = sprintf($xmlTpl,$fromUsername,$toUsername,$time,$msgType,$content);
-	                }else if($msgType == 'music'){// 音乐消息内容
-	                    if(isset($content['title'])){// 内容是否为空
-	                        $resultStr = sprintf($xmlTpl,$fromUsername,$toUsername,$time,$msgType,$content['title'],$content['desc'],$content['url'],$content['hqurl']);
-	                    }
-	                }elseif($msgType == 'news'){// 图文消息内容
-	                    $itemsLit           = NewsList::getNewsList(3);// 图文消息列表
-	                    $newsXmlTpl         = MsgMapTpl::mapTpl('news');// 图文消息模板
-	                    $newsItemsXmlTpl    = MsgMapTpl::mapTpl('news_items');// 图文消息模板中的 Items模板
-	                    
-	                    
-	                    // 拼装 Items的数据
-	                    $count              = count($itemsLit);
-	                    $newsItemsXml       = '';
-	                    foreach($itemsLit as $value_item){
-	                        $newsItemsXml   .= sprintf($newsItemsXmlTpl,$value_item['title'],$value_item['desc'],$value_item['picUrl'],$value_item['url']);
-	                    }
-	                    
-	                    // 拼接消息内容
-	                    $newsXml = sprintf($newsXmlTpl,$fromUsername,$toUsername,$time,$msgType,$count,$newsItemsXml);
-	                    
-	                    $resultStr = $newsXml;
-	                }
-	                
-	                if(empty($resultStr)){// 未响应用户请求
-	                    $return_text = TulingRobot::queryTuLingText($keyWord);// 调用 图灵机器人返回消息
-	                    if(!$return_text){
-	                        $return_text = "暂未实现该功能，敬请等待...";
-	                    }
-	                    
-	                    $msgType    = 'text';
-	                    $resultStr  = sprintf($xmlTpl,$fromUsername,$toUsername,$time,$msgType,$return_text);
-	                }
-	                saveLog($resultStr);
-	                
-	                echo $resultStr;
-	            }else{
-	                echo 'Input something...';
-	            }
-	            
-	        }elseif($msgType == 'image'){// 用户图片消息
-	            $msgType    = 'text';
-	            $xmlTpl     = MsgMapTpl::mapTpl($msgType);
-	            $contentStr = "Welcome to wechat world!\n您发送的是图片消息，未能处理您的请求\n";
-	            $resultStr  = sprintf($xmlTpl,$fromUsername,$toUsername,$time,$msgType,$contentStr);
-	            
-	            echo $resultStr;
-	        }elseif($msgType == 'location'){// 地理位置消息
-	            
-	            
-	            
+	        saveLog($this->msgType);
+	        
+	        switch($this->msgType){
+	            case 'text':	               
+	                $resultStr = $this->transmitText();
+	                break;
+	            case 'image':
+	                $resultStr = $this->transmitImage();
+	                break;
+	            case 'news':
+	                $resultStr = $this->transmitNews();
+	                break;
+	            case 'voice':
+	                $resultStr = $this->transmitVoice();
+	                break;
+	            case 'location':
+	                $resultStr = $this->transmitLocationl();
+	                break;
+	            case 'audio':
+	                $resultStr = $this->transmitAudio();
+	                break;
 	            
 	        }
+	        saveLog($resultStr);
 	        
-	        saveLog(100);
+	        echo $resultStr;
 	    }else{
 	        echo '';
 	    }
 	    exit;
+	}
+	
+	public function transmitText(){
+	    $keyWord        = trim($this->postObj->Content);
+	    if(!empty($keyWord)){
+	        $resultStr = '';
+	        
+	        $returnContent  = MsgMapNumber::mapMsg($keyWord);// 根据关键字的值设置 返回消息类型与内容
+	        $msgType        = $returnContent['msgType'];// 返回的消息类型
+	        $content        = $returnContent['content'];// 返回的消息内容
+	        $xmlTpl         = MsgMapTpl::mapTpl($msgType);// 根据消息类型获取 类型对应的模板
+	        
+	        saveLog($xmlTpl);
+	        saveLog($returnContent);
+	        if($msgType == 'text' AND $content){// 文本消息内容
+	            $resultStr = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->time,$msgType,$content);
+	        }else if($msgType == 'music'){// 音乐消息内容
+	            if(isset($content['title'])){// 内容是否为空
+	                $resultStr = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->time,$msgType,$content['title'],$content['desc'],$content['url'],$content['hqurl']);
+	            }
+	        }elseif($msgType == 'news'){// 图文消息内容
+	            $itemsLit           = NewsList::getNewsList(3);// 图文消息列表
+	            $newsXmlTpl         = MsgMapTpl::mapTpl('news');// 图文消息模板
+	            $newsItemsXmlTpl    = MsgMapTpl::mapTpl('news_items');// 图文消息模板中的 Items模板
+	            	           
+	            // 拼装 Items的数据
+	            $count              = count($itemsLit);
+	            $newsItemsXml       = '';
+	            foreach($itemsLit as $value_item){
+	                $newsItemsXml   .= sprintf($newsItemsXmlTpl,$value_item['title'],$value_item['desc'],$value_item['picUrl'],$value_item['url']);
+	            }
+	            
+	            // 拼接消息内容
+	            $newsXml = sprintf($newsXmlTpl,$this->fromUsername,$this->toUsername,$this->time,$msgType,$count,$newsItemsXml);
+	            
+	            $resultStr = $newsXml;
+	        }
+	        
+	        if(empty($resultStr)){// 未响应用户请求
+	            $return_text = TulingRobot::queryTuLingText($keyWord);// 调用 图灵机器人返回消息
+	            if(!$return_text){
+	                $return_text = "暂未实现该功能，敬请等待...";
+	            }
+	            
+	            $msgType    = 'text';
+	            $resultStr  = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->time,$msgType,$return_text);
+	        }
+	        saveLog($resultStr);
+	        
+	        return $resultStr;
+	    }else{
+	        return 'Input something...';
+	    }	    
+	    
+	}
+	
+	public function transmitImage(){
+	    $msgType    = 'text';
+	    $xmlTpl     = MsgMapTpl::mapTpl($msgType);
+	    $contentStr = "Welcome to wechat world!\n您发送的是图片消息，未能处理您的请求\n";
+	    $resultStr  = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->time,$this->msgType,$contentStr);
+	    
+	    return $resultStr;	    
 	}
 	
 	
