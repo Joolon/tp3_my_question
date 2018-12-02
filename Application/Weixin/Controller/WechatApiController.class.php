@@ -119,10 +119,10 @@ class WechatApiController extends BaseController
 	        $xmlTpl         = MsgMapTpl::mapTpl($msgType);// 根据消息类型获取 类型对应的模板
 	        
 	        if($msgType == 'text' AND $content){// 文本消息内容
-	            $resultStr = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->time,$msgType,$content);
+	            $resultStr = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->nowTime,$msgType,$content);
 	        }else if($msgType == 'music'){// 音乐消息内容
 	            if(isset($content['title'])){// 内容是否为空
-	                $resultStr = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->time,$msgType,$content['title'],$content['desc'],$content['url'],$content['hqurl']);
+	                $resultStr = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->nowTime,$msgType,$content['title'],$content['desc'],$content['url'],$content['hqurl']);
 	            }
 	        }elseif($msgType == 'news'){// 图文消息内容
 	            $itemsLit           = NewsList::getNewsList(3);// 图文消息列表
@@ -137,7 +137,7 @@ class WechatApiController extends BaseController
 	            }
 	            
 	            // 拼接消息内容
-	            $newsXml = sprintf($newsXmlTpl,$this->fromUsername,$this->toUsername,$this->time,$msgType,$count,$newsItemsXml);
+	            $newsXml = sprintf($newsXmlTpl,$this->fromUsername,$this->toUsername,$this->nowTime,$msgType,$count,$newsItemsXml);
 	            
 	            $resultStr = $newsXml;
 	        }
@@ -149,7 +149,7 @@ class WechatApiController extends BaseController
 	            }
 	            
 	            $msgType    = 'text';
-	            $resultStr  = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->time,$msgType,$return_text);
+	            $resultStr  = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->nowTime,$msgType,$return_text);
 	        }
 	        
 	        return $resultStr;
@@ -175,7 +175,7 @@ class WechatApiController extends BaseController
 	 */
 	public function convertToText($content,$msgType = 'text'){
 	    $xmlTpl        = MsgMapTpl::mapTpl($msgType);// 根据消息类型获取 类型对应的模板
-	    $resultStr     = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->time,$msgType,$content);
+	    $resultStr     = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->nowTime,$msgType,$content);
 	    
 	    return $resultStr;
 	}
