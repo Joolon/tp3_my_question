@@ -196,7 +196,7 @@ class WechatApiController extends BaseController
 	        return $this->convertToText($content);
 	        
 	    }elseif($event == 'scancode_waitmsg' AND $eventKey == 'C_SCAN_2'){// 扫码获取内容并且推送到服务器，等待结果
-	        $content = "【消息内容】\r\n".$this->postObj->SendLocationInfo->ScanResult;
+	        $content = "【消息内容】\r\n".$this->postObj->SendCodeInfo->ScanResult;
 	        return $this->convertToText($content);
 	        
 	    }elseif($event == 'location_select' AND $eventKey == 'C_LOCAL'){// 地理位置选择 事件推送
