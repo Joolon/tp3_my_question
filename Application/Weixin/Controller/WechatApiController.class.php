@@ -196,10 +196,10 @@ class WechatApiController extends BaseController
 	        return $this->convertToText($content);
 	        
 	    }elseif($event == 'location_select' AND $eventKey == 'C_LOCAL'){
-	        $location_X    = $this->postObj->Location_X;
-	        $location_Y    = $this->postObj->Location_Y;
-	        $scale         = $this->postObj->Scale;
-	        $label         = $this->postObj->Label;
+	        $location_X    = $this->postObj->SendLocationInfo->Location_X;
+	        $location_Y    = $this->postObj->SendLocationInfo->Location_Y;
+	        $scale         = $this->postObj->SendLocationInfo->Scale;
+	        $label         = $this->postObj->SendLocationInfo->Label;
 	        $createTime    = date('Y-m-d H:i:s',$this->postObj->CreateTime);
 	        
 	        $content = "【您的位置】\r\n ".
