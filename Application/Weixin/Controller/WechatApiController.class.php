@@ -13,7 +13,7 @@ use Weixin\Event\TulingRobot;
  * 运行在公众号连接的回调模式下
  * 对接微信服务器，响应来自其推送的普通消息或操作事件
  */
-class WechatCallbackApiController extends BaseController
+class WechatApiController extends BaseController
 {
 	protected function _initialize()
 	{
@@ -28,10 +28,11 @@ class WechatCallbackApiController extends BaseController
 	{
 	    requestLog();
 	    // 原样返回 echostr 字段的信息，表示微信验证通过
-	    if(false){
+	    if(I('get.echostr')){
 	        $this->valid();
+	    }else{
+	        $this->responseMsg();	        
 	    }
-	    $this->responseMsg();
 	    
 	    // $phoneNumber = new MsgMapNumber();
 	    // $phoneNumber->responsePhoneNumberList();
@@ -54,7 +55,7 @@ class WechatCallbackApiController extends BaseController
 	 * 文本回复接口
 	 */
 	public function responseMsg(){
-	    $postStr = $GLOBALS['HTTP_RAW_POST_DATA'];
+	    $postStr = $GLOBALS['HTTP_RAW_POST_DATA'];// 不能使用 POST 接收，POST只能接收标准的 POST数据，XML数据不能接收
 	    
 	    if(!empty($postStr)){
 	        saveLog($postStr);
