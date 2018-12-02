@@ -93,7 +93,13 @@ class WechatApiController extends BaseController
 	            case 'audio':
 	                $resultStr = $this->transmitAudio();
 	                break;
-	            
+	            case 'event':
+	                $resultStr = $this->transmitEvent();
+	                break;
+	                
+	            default :
+	                $resultStr = $this->convertToText('您已穿越到唐朝啦');
+	                
 	        }
 	        saveLog($resultStr);
 	        
@@ -161,10 +167,59 @@ class WechatApiController extends BaseController
 	public function transmitImage(){
 	    $msgType    = 'text';
 	    $xmlTpl     = MsgMapTpl::mapTpl($msgType);
-	    $contentStr = "Welcome to wechat world!\n您发送的是图片消息，未能处理您的请求\n";
-	    $resultStr  = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->time,$this->msgType,$contentStr);
+	    $content    = "Welcome to wechat world!\n您发送的是图片消息，未能处理您的请求\n";
 	    
-	    return $resultStr;	    
+	    return $this->convertToText($content);
+	}
+	
+	/**
+	 * 发送一个文本消息
+	 * @param unknown $content
+	 * @param string $msgType
+	 * @return string
+	 */
+	public function convertToText($content,$msgType = 'text'){
+	    $xmlTpl        = MsgMapTpl::mapTpl($msgType);// 根据消息类型获取 类型对应的模板
+	    $resultStr     = sprintf($xmlTpl,$this->fromUsername,$this->toUsername,$this->time,$msgType,$content);
+	    
+	    return $resultStr;
+	}
+	
+	/**
+	 * 响应 微信事件类型 消息
+	 */
+	public function transmitEvent(){
+	    $event     = $this->postObj->event;
+	    $eventKey  = $this->postObj->eventKey;
+	    
+	    if($event ==  'CLICK' AND $eventKey == 'C_GOOD'){
+	        $content = "【Thank You】\r\n让您满意是我们最高荣耀！感谢您的来信。";
+	        return $this->convertToText($content);
+	        
+	    }elseif($event ==  'scancode_push' AND $eventKey == 'C_SCAN'){
+	        $content = $this->postObj->scanResult;
+	        return $this->convertToText($content);
+	        
+	    }elseif($event ==  'location_select' AND $eventKey == 'C_LOCAL'){
+	        $location_X    = $this->postObj->location_X;
+	        $location_Y    = $this->postObj->location_Y;
+	        $scale         = $this->postObj->scale;
+	        $label         = $this->postObj->label;
+	        $createTime    = $this->postObj->createTime;
+	        
+	        $content = "【您的位置】\r\n ".
+            	        "X坐标信息：{$location_X}\r\n".
+            	        "Y坐标信息:{$location_Y}\r\n".
+            	        "地理位置:{$label}\r\n".
+            	        "精度 :{$scale}\r\n".
+            	        "时间:{}";
+	        return $this->convertToText($content);
+	        
+	    }else{
+	        return $this->convertToText('亲爱的，您已穿越到明朝了哦');
+	    }
+	    
+	    
 	}
 	
 	
