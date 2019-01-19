@@ -1,11 +1,11 @@
 <?php
 namespace Admin\Controller;
-use Admin\Controller\CommonController;
+use Common\Controller\BaseController;
 
 /**
  * 处理回答记录相关请求
  */
-class ReplyController extends CommonController
+class ReplyController extends BaseController
 {
     /**
      * 成绩表

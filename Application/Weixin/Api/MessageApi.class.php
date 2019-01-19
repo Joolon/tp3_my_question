@@ -43,7 +43,7 @@ class MessageApi extends BaseApi
      */
     public function sendToID($openid, $msg)
     {
-        $interface = "https://api.weixin.qq.com/cgi-bin/message/mass/preview?access_token={$this->getAccessToken()}";
+        $interface = $this->wxHost."/cgi-bin/message/mass/preview?access_token={$this->getAccessToken()}";
         $msg = sprintf($msg, $openid);
         $responseSeq = httpPost($interface, $msg);
 

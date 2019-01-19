@@ -21,7 +21,7 @@ class WebpageApi extends BaseApi
 	 */
 	public function	getWebpageAccessToken($code)
 	{
-		$interface = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=$this->AppID&secret=$this->AppSecret&code=$code&grant_type=authorization_code";
+	    $interface = $this->wxHost."/sns/oauth2/access_token?appid=$this->AppID&secret=$this->AppSecret&code=$code&grant_type=authorization_code";
 		$responseSeq = httpGet($interface);
 
 		try {
@@ -48,7 +48,7 @@ class WebpageApi extends BaseApi
 	 */
 	public function pullUserinfo($openid, $access_token)
 	{
-		$interface = "https://api.weixin.qq.com/sns/userinfo?access_token=$access_token&openid=$openid&lang=zh_CN";
+	    $interface = $this->wxHost."/sns/userinfo?access_token=$access_token&openid=$openid&lang=zh_CN";
 		$responseSeq = httpGet($interface);
 
 		try {

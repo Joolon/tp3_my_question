@@ -66,8 +66,8 @@ defined('PUBLIC_PATH')  or define('PUBLIC_PATH',        BASE_PATH.'Public/');
 defined('PUBLIC_IMG')   or define('PUBLIC_IMG',         PUBLIC_PATH .'Images/');
 defined('PUBLIC_IMG_WECHAT')        or define('PUBLIC_IMG_WECHAT',          PUBLIC_IMG.'wechat/');
 defined('PUBLIC_AUDIOS')            or define('PUBLIC_AUDIOS',              PUBLIC_PATH .'Audios/');
-defined('PUBLIC_AUDIOS_WC_M')       or define('PUBLIC_AUDIOS_WC_M',         PUBLIC_AUDIOS .'hqmusic/');
-defined('PUBLIC_AUDIOS_WC_HQM')     or define('PUBLIC_AUDIOS_WC_HQM',       PUBLIC_AUDIOS .'music/');
+defined('PUBLIC_AUDIOS_WC_M')       or define('PUBLIC_AUDIOS_WC_M',         PUBLIC_AUDIOS .'wechat/music/');
+defined('PUBLIC_AUDIOS_WC_HQM')     or define('PUBLIC_AUDIOS_WC_HQM',       PUBLIC_AUDIOS .'wechat/hqmusic/');
 
 
 // 系统信息
