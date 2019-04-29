@@ -14,14 +14,13 @@ class IndexController extends CommonController
 	}
 
     public function index(){
-    	mysql_connect(C('DB_HOST'), C('DB_USER'), C('DB_PWD'));	//root链接数据库来提权读取版本信息
-
-    	$info = array(
+        $mysqli = new \mysqli(C('DB_HOST'), C('DB_USER'), C('DB_PWD'));	//root链接数据库来提权读取版本信息
+        $info = array(
             'ThinkPHP版本'	=>	THINK_VERSION,
             '操作系统'		=>	PHP_OS,
-            '服务器环境'		=>	$_SERVER["SERVER_SOFTWARE"],
+            '服务器环境'	=>	$_SERVER["SERVER_SOFTWARE"],
             'PHP环境'		=>	PHP_VERSION.'/'.php_sapi_name(),
-            'MySQL版本'		=>	mysql_get_server_info(),
+            'MySQL版本'		=>	$mysqli->server_info,
             '主机信息'		=>	$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].' '.$_SERVER['SERVER_PROTOCOL'],
             'WEB目录'		=>	$_SERVER["DOCUMENT_ROOT"],
             '服务器域名/IP'	=>	$_SERVER['SERVER_NAME'].' [ '.gethostbyname($_SERVER['SERVER_NAME']).' ]',
