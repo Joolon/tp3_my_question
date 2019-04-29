@@ -7,7 +7,7 @@ return array(
     /* 数据库配置 */
     'DB_USER'               =>  'root',  // 用户名
     'DB_PWD'                =>  'root.Jolon.123456', // 密码
-    'DB_HOST'               =>  '47.107.183.46',  // 服务器地址
+    'DB_HOST'               =>  '127.0.0.1',  // 服务器地址
 
     'DB_NAME'               =>  'questionnaire',  // 数据库名
     'DB_TYPE'               =>  'mysqli',  // 数据库类型
